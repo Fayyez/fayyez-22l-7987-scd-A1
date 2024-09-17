@@ -1,9 +1,0 @@
-1,100,0,05/02/2024,5,17,150,total bill,12/02/2024,1,
-
-4 digit customer id (borrowed
-from the CustomersInfo file), Billing month, Current Meter Reading Regular, Current Meter
-Reading Peak, Reading Entry Date in format DD/MM/YYYY (cannot be in future, issue date of the bill),
-Cost of electricity, Sales Tax Amount, Fixed Charges, Total Billing
-amount, Due Date in format DD/MM/YYYY (7 calendar days after the entry of Current Meter
-Reading), Bill Paid Status (Paid or Unpaid), Bill payment Date in format DD/MM/YYYY
-(cannot be before Reading Entry Date)

@@ -64,36 +64,28 @@ public class TaxManager { // is a singleton class
     public int get1phaseDomesticIndex() {
         return 0;
     }
-
     public int get3phaseDomesticIndex() {
         return 2;
     }
-
     public int get1phaseCommercialIndex() {
         return 1;
     }
-
     public int get3phaseCommercialIndex() {
         return 3;
     }
-
     // Getters
     public int getRegUnitPrice(int index) {
         return regUnitPrices[index];
     }
-
     public int getPeakUnitPrice(int index) {
         return peakUnitPrices[index];
     }
-
     public float getTaxPercentage(int index) {
         return taxPercentages[index];
     }
-
     public int getFixedCharge(int index) {
         return fixedCharges[index];
     }
-
     // Setters
     public void setRegUnitPrice(int index, int price) {
         if (index < 0 || index > 3) {
@@ -101,25 +93,37 @@ public class TaxManager { // is a singleton class
         }
         regUnitPrices[index] = price;
     }
-
     public void setPeakUnitPrice(int index, int price) {
         if (index < 0 || index > 3) {
             throw new IllegalArgumentException("Invalid index while setting price in tax manager");
         }
         peakUnitPrices[index] = price;
     }
-
     public void setFixedCharges(int index, int charges) {
         if (index < 0 || index > 3) {
             throw new IllegalArgumentException("Invalid index while setting price in tax manager");
         }
         fixedCharges[index] = charges;
     }
-
     public void setTaxPercentage(int index, float percentage) {
         if (index < 0 || index > 3) {
             throw new IllegalArgumentException("Invalid index while setting price in tax manager");
         }
         taxPercentages[index] = percentage;
+    }
+    // printing
+    public void printSingleTaxSummary(int index) {
+        System.out.println("Tax Summary:");
+        System.out.println("1-Phase Domestic: Regular Unit Price: " + regUnitPrices[index] + " Peak Unit Price: "
+                + peakUnitPrices[index] + " Tax Percentage: " + taxPercentages[index] + " Fixed Charges: " + fixedCharges[index]);
+    }
+    public void printTaxSummary() {
+        System.out.println("Tax Summary:");
+        System.out.println("1-Phase Domestic: Reg Unit Price: " + regUnitPrices[0] + " Tax Percentage: " + taxPercentages[0] + " Fixed Charges: " + fixedCharges[0]);
+        System.out.println("1-Phase Commercial: Reg Unit Price: " + regUnitPrices[1] + " Tax Percentage: " + taxPercentages[1] + " Fixed Charges: " + fixedCharges[1]);
+        System.out.println("3-Phase Domestic: Reg Unit Price: " + regUnitPrices[2] + " Peak Unit Price: "
+                + peakUnitPrices[2] + " Tax Percentage: " + taxPercentages[2] + " Fixed Charges: " + fixedCharges[2]);
+        System.out.println("3-Phase Commercial: Reg Unit Price: " + regUnitPrices[3] + " Peak Unit Price: "
+                + peakUnitPrices[3] + " Tax Percentage: " + taxPercentages[3] + " Fixed Charges: " + fixedCharges[3]);
     }
 }

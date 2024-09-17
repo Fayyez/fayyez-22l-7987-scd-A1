@@ -19,7 +19,7 @@ public class Employee extends User {
     public String getPassword() {
         return this.password;
     }
-    void setPassword(String password) {
+    public void setPassword(String password) {
         if(password.length()<=1) {
             throw new IllegalArgumentException("Password must be longer than 1 character");
         }

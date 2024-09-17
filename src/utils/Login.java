@@ -32,7 +32,7 @@ public class Login {
             return LoginEmployee();
         }
         else if(choice == 3) {
-            System.out.println("Exiting...");
+            System.out.println("GOODBYE!!! Phir milein ge chalte chalte......");
             System.exit(0);
         }
         return null;
@@ -49,7 +49,7 @@ public class Login {
             System.out.println("ID must be a 4 digit number");
             return null;
         }
-        else if (cnic>9999999999999L||cnic<1000000000000L) {
+        else if (cnic > 9999999999999L || cnic < 1000000000000L) {
             System.out.println("CNIC must be a 13 digit number");
             return null;
         }
