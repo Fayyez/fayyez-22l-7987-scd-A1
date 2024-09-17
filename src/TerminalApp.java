@@ -1,8 +1,5 @@
-import utils.CustomerManager;
-import utils.DateBuilder;
-import utils.Login;
+import utils.*;
 import models.*;
-import utils.TaxManager;
 
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -70,6 +67,7 @@ import java.util.Scanner;
 //Date (format DD/MM/YYYY). The NADRADB file shall have multiple records (one for each
 //        person with a CNIC)
 public class TerminalApp {
+    // employee menu options implementation
     public void addCustomer(Scanner scanner) throws FileNotFoundException {
         // add new customer
         System.out.println("Enter CNIC: ");
@@ -108,7 +106,7 @@ public class TerminalApp {
         }
         return 0;// default retirn 1phase single meter
     }
-    public void generateBill(Scanner scanner) {
+    public void generateBill(Scanner scanner) throws FileNotFoundException {
         // get the cutsomer whose bill is to be added
         System.out.println("Enter Customer ID: ");
         int cust_id = Integer.parseInt(scanner.nextLine());
@@ -127,10 +125,25 @@ public class TerminalApp {
             throw new IllegalArgumentException("Invalid current regular reading entered while genrating new bill");
         }
         Date issueDate = new Date();
-        int index = this.getIndex(cust);
-
-
+        int tax_index = this.getIndex(cust);
+        TaxManager taxManager = TaxManager.getInstance();
+        int reg_units_consumed = current_reg_reading - cust.getUnitsConsumed();
+        int peak_units_consumed = 0;
+        if (cust instanceof ThreePhaseCust) {
+            System.out.println("Enter Current Peak Reading: ");
+            int current_peak_reading = Integer.parseInt(scanner.nextLine());
+            peak_units_consumed = current_peak_reading - ((ThreePhaseCust) cust).getPeakUnitsConsumed();
+        }
+        int cost = reg_units_consumed * taxManager.getRegUnitPrice(tax_index) + peak_units_consumed * taxManager.getPeakUnitPrice(tax_index);
+        float taxAmount = (cost * taxManager.getTaxPercentage(tax_index)) / 100;
+        int fixedcharges = taxManager.getFixedCharge(tax_index);
+        int totalbill = cost + (int)taxAmount + fixedcharges;
+        Date dueDate = DateBuilder.add7Days(issueDate);
+        boolean isPaid = false;
+        Date paidDate = null;
+        BillManager.addBill(cust_id, billingmonth, current_reg_reading, peak_units_consumed, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, null);
     }
+    // Menus
     public void EmployeeMenu(Employee current_employee) {
         System.out.println("Welcome " + current_employee.getUsername() + " to the Employee Menu");
         int choice = 0;
@@ -152,12 +165,28 @@ public class TerminalApp {
                         this.generateBill(scanner);
                         break;
                     case 3:
-                        // view customer info
+                        // check close to expiry in madra system thru nadra file handler
                         break;
                     case 4:
-                        // view bill info
+                        // update bill to paid status and add paid date
+                        // update the customers units consumed through customer manager
                         break;
                     case 5:
+                        // update sales tax file
+                        break;
+                    case 6:
+                        // view any bill of customer id
+                        break;
+                    case 7:
+                        // update their password
+                        break;
+                    case 8:
+                        //add other employee
+                        break;
+                    case 9:
+                        // show bills summary (paid and unpaid) + total amount of each category of bills
+                        break;
+                    case 0:
                         System.out.println("GOODBYE!!! Phir milein ge chalte chalte......");
                         System.exit(0);
                         break;

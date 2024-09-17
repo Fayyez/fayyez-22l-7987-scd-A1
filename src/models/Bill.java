@@ -81,6 +81,10 @@ public class Bill {
         this.isPaid = isPaid;
     }
     public void setPaidDate(Date paidDate) {
+        if(paidDate==null) {
+            this.paidDate = null;
+            return;
+        }
         if(paidDate.before(this.issueDate)) {
             throw new IllegalArgumentException("Paid date cannot be in future");
         }
@@ -121,7 +125,16 @@ public class Bill {
         return this.isPaid;
     }
     public Date getPaidDate() {
+        if(!this.isPaid) {
+            return null;
+        }
         return this.paidDate;
+    }
+    public String getPaidDateStr() {
+        if(!this.isPaid) {
+            return "not paid yet";
+        }
+        return DateBuilder.getDateStr(this.paidDate);
     }
     // constructors
     public Bill(int customerID, int billingmonth, int current_reg_reading, int current_peak_reading, Date issueDate, int cost, float taxAmount, int fixedcharges, int totalbill, Date dueDate, boolean isPaid, Date paidDate) {

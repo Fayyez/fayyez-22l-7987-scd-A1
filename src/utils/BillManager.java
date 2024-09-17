@@ -35,6 +35,7 @@ public class BillManager {
                 Date dueDate = DateBuilder.getDateobj(data[9]);
                 boolean isPaid = Boolean.parseBoolean(data[10]);
                 Date paidDate = DateBuilder.getDateobj(data[11]);
+                if(paidDate.equals("not paid yet")) paidDate = null;
                 // create appropriate bill object
                 Bill bill = new Bill(cust_id, billingmonth, current_reg_reading, current_peak_reading, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, paidDate);
                 bills.add(bill);
@@ -48,7 +49,10 @@ public class BillManager {
         try (FileWriter fw = new FileWriter(filepath);
              BufferedWriter bw = new BufferedWriter(fw);) {
             for (Bill bill : bills) {
-                String entry = bill.getCustomerID() + "," + bill.getBillingmonth() + "," + bill.getCurrent_reg_reading() + "," + bill.getCurrent_peak_reading() + "," + DateBuilder.getDateStr(bill.getIssueDate()) + "," + bill.getCost() + "," + bill.getTaxAmount() + "," + bill.getFixedcharges() + "," + bill.getTotalbill() + "," + DateBuilder.getDateStr(bill.getDueDate()) + "," + bill.getIsPaid() + "," + DateBuilder.getDateStr(bill.getPaidDate());
+                String paiddate;
+                if (!bill.getIsPaid())  paiddate = "not paid yet";
+                else paiddate = DateBuilder.getDateStr(bill.getPaidDate());
+                String entry = bill.getCustomerID() + "," + bill.getBillingmonth() + "," + bill.getCurrent_reg_reading() + "," + bill.getCurrent_peak_reading() + "," + DateBuilder.getDateStr(bill.getIssueDate()) + "," + bill.getCost() + "," + bill.getTaxAmount() + "," + bill.getFixedcharges() + "," + bill.getTotalbill() + "," + DateBuilder.getDateStr(bill.getDueDate()) + "," + bill.getIsPaid() + "," + paiddate;
                 bw.write(entry);
                 bw.newLine();
             }
