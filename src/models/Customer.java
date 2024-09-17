@@ -78,6 +78,9 @@ public abstract class Customer extends User {
         }
         return "Commercial";
     }
+    public boolean getIsDomestic() {
+        return this.isDomestic;
+    }
     public void setIsDomestic(boolean isDomestic) {
         this.isDomestic = isDomestic;
     }

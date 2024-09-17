@@ -56,4 +56,46 @@ public class BillManager {
             throw new RuntimeException("Error writing to bills file");
         }
     }
+    public static boolean addBill(int cust_id, int billingmonth, int current_reg_reading, int current_peak_reading, Date issueDate, int cost, float taxAmount, int fixedcharges, int totalbill, Date dueDate, boolean isPaid, Date paidDate) throws FileNotFoundException {
+        // get all bills in a list
+        // create new bill and add to the list and write to file
+        ArrayList<Bill> bills = new ArrayList<>();
+        BillManager.getListOfBills(bills);
+        Bill bill = new Bill(cust_id, billingmonth, current_reg_reading, current_peak_reading, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, paidDate);
+        bills.add(bill);
+        BillManager.writeBillInfo(bills);
+        return true;
+    }
+    public static ArrayList<Bill> getAllBillsOfCustomer(int cust_id) throws FileNotFoundException {
+        // get all bills of a customer
+        ArrayList<Bill> bills = new ArrayList<>();
+        BillManager.getListOfBills(bills);//read all bills in file
+        ArrayList<Bill> customerBills = new ArrayList<>();
+        for (Bill bill : bills) {// filter the bills of the customer passed
+            if (bill.getCustomerID() == cust_id) {
+                customerBills.add(bill);
+            }
+        }
+        return customerBills;
+    }
+    public static ArrayList<Bill> getAllPaidBills(ArrayList<Bill> allbills) throws FileNotFoundException {
+        // get all paid bills from the bills list passed as arg
+        ArrayList<Bill> paidBills = new ArrayList<>();
+        for (Bill bill : allbills) {
+            if (bill.getIsPaid()) {
+                paidBills.add(bill);
+            }
+        }
+        return paidBills;
+    }
+    public static ArrayList<Bill> getAllUnpaidBills(ArrayList<Bill> bills) throws FileNotFoundException {
+        // get all unpaid bills
+        ArrayList<Bill> unpaidBills = new ArrayList<>();
+        for (Bill bill : bills) {
+            if (!bill.getIsPaid()) {
+                unpaidBills.add(bill);
+            }
+        }
+        return unpaidBills;
+    }
 }
