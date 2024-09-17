@@ -1,9 +1,23 @@
+import models.*;
+import utils.CustomerManager;
+import utils.Login;
+
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.util.ArrayList;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.println("Hello and welcome!");
+        try {
+            Customer c = Login.LoginCustomer();
+            System.out.println(c);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 }

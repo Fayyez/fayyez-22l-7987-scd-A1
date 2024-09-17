@@ -1,0 +1,2 @@
+1000,3310035693443,Fayyez Farrukh,house no. 9211 gali number 420,03030022466,1,single,1/02/2023,10,0
+1001,3310035694444,Nayel Farrukh,house no. 9211 gali number 420,03030022555,0,three,11/02/2025,155,77
