@@ -48,6 +48,8 @@ public class CustomerManager {
                 String meter_type = cust instanceof OnePhaseCust ? "single" : "three";
                 int peak_units_consumed = cust instanceof ThreePhaseCust ? ((ThreePhaseCust) cust).getPeakUnitsConsumed() : 0;
                 String entry = cust.getId() + "," + cust.getCnic() + "," + cust.getName() + "," + cust.getAddress() + "," + cust.getPhone() + "," + cust.getIsDomesticStr() + "," + meter_type + "," + cust.getConnectionDate() + "," + cust.getUnitsConsumed() + "," + peak_units_consumed;
+                bw.write(entry);
+                bw.newLine();
             }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to customers file");

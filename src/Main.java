@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         try {
-            Customer c = Login.LoginCustomer();
+            Employee c = Login.LoginEmployee();
             System.out.println(c);
         } catch (Exception e) {
             System.out.println(e.getMessage());

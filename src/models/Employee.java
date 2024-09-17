@@ -10,13 +10,13 @@ public class Employee extends User {
         setPassword(password);
     }
     //getters & setters
-    String getUsername() {
+    public String getUsername() {
         return this.username;
     }
     void setUsername(String username) {
         this.username = username;
     }
-    String getPassword() {
+    public String getPassword() {
         return this.password;
     }
     void setPassword(String password) {
