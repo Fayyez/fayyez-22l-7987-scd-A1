@@ -34,8 +34,10 @@ public class BillManager {
                 int totalbill = Integer.parseInt(data[8]);
                 Date dueDate = DateBuilder.getDateobj(data[9]);
                 boolean isPaid = Boolean.parseBoolean(data[10]);
-                Date paidDate = DateBuilder.getDateobj(data[11]);
-                if(paidDate.equals("not paid yet")) paidDate = null;
+                String paidDatestr = (data[11]);
+                Date paidDate;
+                if(paidDatestr.equals("not paid yet")) paidDate = null;
+                else paidDate = DateBuilder.getDateobj(paidDatestr);
                 // create appropriate bill object
                 Bill bill = new Bill(cust_id, billingmonth, current_reg_reading, current_peak_reading, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, paidDate);
                 bills.add(bill);
@@ -101,5 +103,57 @@ public class BillManager {
             }
         }
         return unpaidBills;
+    }
+    public static Bill getBill(int cust_id, int billingmonth) throws FileNotFoundException {
+        // get a bill of a customer with a billing month
+        ArrayList<Bill> bills = new ArrayList<>();
+        BillManager.getListOfBills(bills);
+        for (Bill bill : bills) {
+            if (bill.getCustomerID() == cust_id && bill.getBillingmonth() == billingmonth) {
+                return bill;
+            }
+        }
+        return null;
+    }
+    public static Bill getBill(ArrayList<Bill> bills, int cust_id, int billingmonth) {
+        // get a bill of a customer with a billing month
+        for (Bill bill : bills) {
+            if (bill.getCustomerID() == cust_id && bill.getBillingmonth() == billingmonth) {
+                return bill;
+            }
+        }
+        return null;
+    }
+    public static boolean setBillToPaid(int custId, int billingmonth) throws FileNotFoundException {
+        // read all the bills and match the bill with the customer id and billing month
+        ArrayList<Bill> bills = new ArrayList<>();
+        Bill bill = null;
+        try {
+            BillManager.getListOfBills(bills);
+            bill = BillManager.getBill(bills, custId, billingmonth);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Error reading bills file");
+        }
+        if(bill==null) {
+            System.out.println("Bill not found while setting to paid status");
+            return false;
+        }
+        ArrayList<Customer> allCustomers = null;
+        try {
+            CustomerManager.getListOfCustomers(allCustomers);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Error reading customers file");
+        }
+        Customer customer = CustomerManager.getCustomer(allCustomers, custId);
+        customer.setUnitsConsumed(bill.getCurrent_reg_reading());
+        if (customer instanceof ThreePhaseCust) {
+            ThreePhaseCust threePhaseCust = (ThreePhaseCust) customer;
+            threePhaseCust.setPeakUnitsConsumed(bill.getCurrent_peak_reading());
+        }
+        // set bill status to paid and write/update customers and bills records
+        bill.setIsPaid(true);
+        bill.setPaidDate(new Date());
+        BillManager.writeBillInfo(bills);
+        return true;
     }
 }

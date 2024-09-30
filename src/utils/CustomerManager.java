@@ -114,4 +114,12 @@ public class CustomerManager {
         }
         throw new IllegalArgumentException("Customer not found");
     }
+    public static Customer getCustomer(ArrayList<Customer> customers, int id) {
+        for(Customer c: customers) {
+            if(c.getId() == id) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Customer not found");
+    }
 }

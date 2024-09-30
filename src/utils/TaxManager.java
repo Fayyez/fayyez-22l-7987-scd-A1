@@ -9,7 +9,7 @@ public class TaxManager { // is a singleton class
     private int[] peakUnitPrices;
     private float[] taxPercentages;
     private int[] fixedCharges;
-    private final static String filepath = "src/database/txInfo.txt";
+    private final static String filepath = "src/database/taxInfo.txt";
 
     // Private constructor for singleton pattern
     private TaxManager() {
@@ -42,7 +42,6 @@ public class TaxManager { // is a singleton class
                     taxPercentages[i] = Float.parseFloat(data[2]);
                     fixedCharges[i] = Integer.parseInt(data[3]);
                 }
-
                 i++;
             }
             br.close();
@@ -125,5 +124,13 @@ public class TaxManager { // is a singleton class
                 + peakUnitPrices[2] + " Tax Percentage: " + taxPercentages[2] + " Fixed Charges: " + fixedCharges[2]);
         System.out.println("3-Phase Commercial: Reg Unit Price: " + regUnitPrices[3] + " Peak Unit Price: "
                 + peakUnitPrices[3] + " Tax Percentage: " + taxPercentages[3] + " Fixed Charges: " + fixedCharges[3]);
+    }
+
+    public void updateTaxInfo(int choice, int regUnitPrice, int peakUnitPrice, float taxPercentage, int fixedCharges) {
+        // set values using the setter
+        setFixedCharges(choice,fixedCharges);
+        setTaxPercentage(choice, taxPercentage);
+        setPeakUnitPrice(choice, peakUnitPrice);
+        setRegUnitPrice(choice, regUnitPrice);
     }
 }

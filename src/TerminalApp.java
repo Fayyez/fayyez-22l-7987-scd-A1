@@ -2,6 +2,7 @@ import utils.*;
 import models.*;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 //The LESCO billing system shall maintain records of usernames and passwords of LESCO
@@ -66,6 +67,17 @@ import java.util.Scanner;
 //CNIC: CNIC Number (13 digit without dashes), Issuance Date (format DD/MM/YYYY), Expiry
 //Date (format DD/MM/YYYY). The NADRADB file shall have multiple records (one for each
 //        person with a CNIC)
+//6. The employees will add a row in BillingInfo every month when the meter reading needs to
+//be entered in the system. The employees will update the Bill Paid Status field in the
+//BillingInfo file once they receive offline information about payment against a bill. Once this
+//information is changed, the system shall automatically update the Total Units Consumed
+//field in the file CustomersInfo file to Current Meter Reading.
+//        7. The LESCO billing system shall allow the LESCO employees with valid username and
+//password (after login) to add or update entries in the TariffTaxInfo file. The system shall
+//make sure that exactly 4 rows exist in this file. The employees can update the tariff, tax etc.
+//whenever they find it appropriate.
+//8. The LESCO billing system shall allow the LESCO employees with valid username and
+//password (after login) to view any bill after providing its 4 digit customer id.
 public class TerminalApp {
     // employee menu options implementation
     public void addCustomer(Scanner scanner) throws FileNotFoundException {
@@ -143,6 +155,55 @@ public class TerminalApp {
         Date paidDate = null;
         BillManager.addBill(cust_id, billingmonth, current_reg_reading, peak_units_consumed, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, null);
     }
+    public void displayExpiringCnics() {
+        try {
+            ArrayList<Cnic> expiringCnics = CNICManager.getCnicsAboutToExpireIn30Days();
+            if(expiringCnics.size() == 0) {
+                System.out.println("No CNICs are expiring in next 30 days");
+                return;
+            }
+            for (Cnic cnic : expiringCnics) {
+                System.out.println(cnic);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void setBillToPaid() throws FileNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Customer ID: ");
+        int cust_id = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter Billing Month: ");
+        int billingmonth = Integer.parseInt(scanner.nextLine());
+        boolean response = BillManager.setBillToPaid(cust_id, billingmonth);
+        if(response) {
+            System.out.println("Bill set to paid successfully");
+        }
+        else {
+            System.out.println("Bill not updated.");
+        }
+    }
+    public void updateSalexTaxInfo() {
+        Scanner scanner = new Scanner(System.in);
+        TaxManager taxManager = TaxManager.getInstance();
+        System.out.println("<Enter 1> for 1 Phase Domestic");
+        System.out.println("<Enter 2> for 1 Phase Commercial");
+        System.out.println("<Enter 3> for 3 Phase Domestic");
+        System.out.println("<Enter 4> for 3 Phase Commercial");
+        int choice = Integer.parseInt(scanner.nextLine()) - 1;
+        System.out.println("Enter Regular Unit Price: ");
+        int reg_unit_price = Integer.parseInt(scanner.nextLine());
+        int peak_unit_price = 0;
+        if(choice > 1) {
+            System.out.println("Enter Peak Unit Price: ");
+            peak_unit_price = Integer.parseInt(scanner.nextLine());
+        }
+        System.out.println("Enter Tax Percentage: ");
+        float tax_percentage = Float.parseFloat(scanner.nextLine());
+        System.out.println("Enter Fixed Charges: ");
+        int fixed_charges = Integer.parseInt(scanner.nextLine());
+        taxManager.updateTaxInfo(choice, reg_unit_price, peak_unit_price, tax_percentage, fixed_charges);
+    }
     // Menus
     public void EmployeeMenu(Employee current_employee) {
         System.out.println("Welcome " + current_employee.getUsername() + " to the Employee Menu");
@@ -151,8 +212,11 @@ public class TerminalApp {
         do {
             System.out.println("1. Add new customer");
             System.out.println("2. Generate bill");
-            System.out.println("3. View customer info");
-            System.out.println("4. View bill info");
+            System.out.println("3. Display expiring CNICs");
+            System.out.println("4. Update bill to paid status");
+            System.out.println("5. Update rates & taxes");
+            System.out.println("6. Get bill details");
+            System.out.println("7. ");
             System.out.println("0. Exit");
             choice = Integer.parseInt(scanner.nextLine());
             try {
@@ -165,17 +229,27 @@ public class TerminalApp {
                         this.generateBill(scanner);
                         break;
                     case 3:
-                        // check close to expiry in madra system thru nadra file handler
+                        this.displayExpiringCnics();
                         break;
                     case 4:
-                        // update bill to paid status and add paid date
-                        // update the customers units consumed through customer manager
+                        setBillToPaid();
                         break;
                     case 5:
-                        // update sales tax file
+                        updateSalexTaxInfo();
                         break;
                     case 6:
-                        // view any bill of customer id
+                        System.out.println("Enter Customer ID: ");
+                        int cust_id = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Enter Billing Month: ");
+                        int billingmonth = Integer.parseInt(scanner.nextLine());
+                        Bill bill = BillManager.getBill(cust_id, billingmonth);
+                        if(bill==null) {
+                            System.out.println("Bill not found");
+                        }
+                        else {
+                            System.out.println("Bill found:");
+                            System.out.println(bill);
+                        }
                         break;
                     case 7:
                         // update their password
