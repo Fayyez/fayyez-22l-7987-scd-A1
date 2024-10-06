@@ -103,7 +103,6 @@ public class TerminalApp {
     }
     public int getIndex(Customer c) {
         TaxManager taxManager = TaxManager.getInstance();
-        int index = 0;
         if (c instanceof OnePhaseCust) {
             if(c.getIsDomestic()) {
                 return taxManager.get1phaseDomesticIndex();
@@ -116,7 +115,7 @@ public class TerminalApp {
             }
             else return taxManager.get3phaseCommercialIndex();
         }
-        return 0;// default retirn 1phase single meter
+        return 0;// default return 1phase single meter
     }
     public void generateBill(Scanner scanner) throws FileNotFoundException {
         // get the cutsomer whose bill is to be added
@@ -152,7 +151,6 @@ public class TerminalApp {
         int totalbill = cost + (int)taxAmount + fixedcharges;
         Date dueDate = DateBuilder.add7Days(issueDate);
         boolean isPaid = false;
-        Date paidDate = null;
         BillManager.addBill(cust_id, billingmonth, current_reg_reading, peak_units_consumed, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, null);
     }
     public void displayExpiringCnics() {
@@ -218,15 +216,18 @@ public class TerminalApp {
             System.out.println("6. Get bill details");
             System.out.println("7. ");
             System.out.println("0. Exit");
+            System.out.println("here: ");
             choice = Integer.parseInt(scanner.nextLine());
             try {
                 switch (choice) {
                     case 1:
                         this.addCustomer(scanner);
+                        System.out.println("Customer added successfully");
                         break;
                     case 2:
                         // generate bill
                         this.generateBill(scanner);
+                        System.out.println("Bill generated successfully");
                         break;
                     case 3:
                         this.displayExpiringCnics();

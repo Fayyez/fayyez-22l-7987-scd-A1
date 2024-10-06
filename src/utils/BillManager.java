@@ -64,9 +64,9 @@ public class BillManager {
     }
     public static boolean addBill(int cust_id, int billingmonth, int current_reg_reading, int current_peak_reading, Date issueDate, int cost, float taxAmount, int fixedcharges, int totalbill, Date dueDate, boolean isPaid, Date paidDate) throws FileNotFoundException {
         // get all bills in a list
-        // create new bill and add to the list and write to file
         ArrayList<Bill> bills = new ArrayList<>();
         BillManager.getListOfBills(bills);
+        // create new bill and add to the list and write to file
         Bill bill = new Bill(cust_id, billingmonth, current_reg_reading, current_peak_reading, issueDate, cost, taxAmount, fixedcharges, totalbill, dueDate, isPaid, paidDate);
         bills.add(bill);
         BillManager.writeBillInfo(bills);
@@ -138,7 +138,7 @@ public class BillManager {
             System.out.println("Bill not found while setting to paid status");
             return false;
         }
-        ArrayList<Customer> allCustomers = null;
+        ArrayList<Customer> allCustomers = new ArrayList<>();
         try {
             CustomerManager.getListOfCustomers(allCustomers);
         } catch (FileNotFoundException e) {

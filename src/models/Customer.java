@@ -87,6 +87,9 @@ public abstract class Customer extends User {
     public String getConnectionDate() {
         return this.connectionDate.toString();
     }
+    public Date getConnectionDateObj() {
+        return this.connectionDate;
+    }
     public void setConnectionDate(Date connectionDate) {
         this.connectionDate = connectionDate;
     }

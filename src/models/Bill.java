@@ -72,9 +72,6 @@ public class Bill {
         this.totalbill = totalbill;
     }
     public void setDueDate(Date dueDate) {
-        if(DateBuilder.isInPast(dueDate)) {
-            throw new IllegalArgumentException("Due date cannot be in past");
-        }
         this.dueDate = dueDate;
     }
     public void setIsPaid(boolean isPaid) {
