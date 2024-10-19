@@ -123,4 +123,18 @@ public class CustomerManager {
         }
         throw new IllegalArgumentException("Customer not found");
     }
+    public static Customer getCustomer(int id, String username) {
+        ArrayList<Customer> customers = new ArrayList<>();
+        try {// read all the customers in a list
+            CustomerManager.getListOfCustomers(customers);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        for(Customer c: customers) {
+            if(c.getId() == id && c.getName().equalsIgnoreCase(username)) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Customer not found");
+    }
 }
