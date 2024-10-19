@@ -124,6 +124,28 @@ public class BillManager {
         }
         return null;
     }
+    public static Bill getLatestBill(int cust_id) {
+        // get the latest bill of a customer
+        ArrayList<Bill> bills = new ArrayList<>();
+        try {
+            BillManager.getListOfBills(bills);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Error reading bills file");
+        }
+        Bill latestBill = null;
+        for (Bill bill : bills) {
+            if (bill.getCustomerID() == cust_id) {
+                if (latestBill == null) {
+                    latestBill = bill;
+                } else {
+                    if(bill.getIssueDate().after(latestBill.getIssueDate())) {
+                        latestBill = bill;
+                    }
+                }
+            }
+        }
+        return latestBill;
+    }
     public static boolean setBillToPaid(int custId, int billingmonth) throws FileNotFoundException {
         // read all the bills and match the bill with the customer id and billing month
         ArrayList<Bill> bills = new ArrayList<>();

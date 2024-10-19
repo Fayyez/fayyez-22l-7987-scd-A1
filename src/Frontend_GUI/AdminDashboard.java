@@ -6,14 +6,18 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 
 public class AdminDashboard extends JFrame {
-    private JPanel pnl_main;
+    // Static global
+    public static int WIDTH = 1200;
+    public static int HEIGHT = 800;
+    // Attributes
     private Employee user;
+    // gui elements //
+    private JSplitPane pnl_main; // (left half has all available operations list, right half has all the details)
 
-    public AdminDashboard(Employee user, JPanel pnlMain) {
+    public AdminDashboard(Employee user) {
         this.user = user;
-        this.pnl_main = pnlMain;
         this.init();
-        pnl_main.setVisible(true);
+        setVisible(true);
     }
 
     private void init() {

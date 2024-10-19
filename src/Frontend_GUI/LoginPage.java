@@ -2,17 +2,12 @@ package Frontend_GUI;
 
 import models.Customer;
 import models.Employee;
-import org.w3c.dom.Text;
 import utils.CustomerManager;
 import utils.EmployeeManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.Arrays;
 
 public class LoginPage extends JFrame implements ActionListener {
     // main panels
@@ -20,7 +15,6 @@ public class LoginPage extends JFrame implements ActionListener {
     private JPanel pnl_left;
     private JPanel pnl_right;// a gridbaglayout
     // right panel components
-    // logo
     private JCheckBox cb_admin_login;
     private JLabel lbl_logo;
     private JLabel lbl_title;
@@ -104,7 +98,7 @@ public class LoginPage extends JFrame implements ActionListener {
     }
 
     private void setBtnActions() {
-        // handle login buttin clicked
+        // handle login button clicked
         btn_login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,7 +107,7 @@ public class LoginPage extends JFrame implements ActionListener {
                 String password = txt_password.getText();
                 txt_username.setText("");
                 txt_password.setText("");
-                if(username.length() <= 0 || password.length() <= 0) {
+                if(username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Username or password cannot be empty");
                     return;
                 }
@@ -128,7 +122,7 @@ public class LoginPage extends JFrame implements ActionListener {
                         // open the dashboard
                         pnl_main.removeAll();
                         dispose();
-                        new AdminDashboard(user, pnl_main);
+                        new AdminDashboard(user);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Invalid username or password for admin");
                         return;
@@ -141,7 +135,8 @@ public class LoginPage extends JFrame implements ActionListener {
                         Customer user = CustomerManager.getCustomer(id, username);
                         // open the cutomer dashboard
                         dispose();
-                        new CustomerDashboard(user, pnl_main);
+                        System.out.println("Customer login successful");
+                        new CustomerDashboard(user);
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "ID must be an integer value");
                         return;
@@ -186,7 +181,7 @@ public class LoginPage extends JFrame implements ActionListener {
         this.pnl_left = new JPanel(new BorderLayout());
         pnl_left.setBorder(BorderFactory.createEmptyBorder(175, 50, 175, 50));
         pnl_left.setPreferredSize(new Dimension(450, 600));
-        pnl_left.setBackground(Color.orange);
+        pnl_left.setBackground(Color.BLUE);
         // create logo and image and add to the centre make north east west south borders broad
         ImageIcon icon_logo = new ImageIcon("src/Assets/logo.png");
         this.lbl_logo = new JLabel(icon_logo);

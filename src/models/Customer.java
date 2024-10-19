@@ -2,7 +2,7 @@ package models;
 
 import java.util.Date;
 
-public abstract class Customer extends User {
+public class Customer extends User {
 // (4 digit id,13digitcnic,name,address,phone,type{commercial/domestic}, metertype{single/three},connection_date,units_consumed,peak_units_consumed)
     private int id;//4 digit customer id
     private double cnic;
