@@ -1,8 +1,8 @@
 package Frontend_GUI;
 
+import Frontend_GUI.Employee_Panels.ViewCustomersPanel;
 import models.Employee;
 
-import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -41,6 +41,17 @@ public class AdminDashboard extends JFrame {
     // right panel stuff here
     private JLabel lbl_right_panel_title;
     private BorderLayout border_layout_right_pnl;
+    private JPanel pnl_view_all_customers;
+    private JPanel pnl_add_customer;
+    private JPanel pnl_nadra_cnic_info;
+
+    private JPanel pnl_view_all_bills;
+    private JPanel pnl_add_bill;
+    private JPanel pnl_view_bill;
+    private JPanel pnl_tax_info;
+
+    private JPanel pnl_add_employee;
+    private JPanel pnl_update_password;
 
     public AdminDashboard(Employee user) {
         this.user = user;
@@ -79,10 +90,22 @@ public class AdminDashboard extends JFrame {
         // setting up the right panel elements
         lbl_right_panel_title = new JLabel("Customers Data", JLabel.CENTER);// all customers is the default card to be shown on the screen when panel is opened
         lbl_right_panel_title.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl_right_panel_title.setPreferredSize(new Dimension(0, 50));
+        lbl_right_panel_title.setBackground(Color.BLUE);
+        lbl_right_panel_title.setForeground(Color.WHITE);
+        lbl_right_panel_title.setOpaque(true);
+        pnl_right_container.add(lbl_right_panel_title, BorderLayout.NORTH);
 
         card_layout_right_pnl = new CardLayout();
         pnl_right = new JPanel();
         pnl_right.setLayout(card_layout_right_pnl);
+        pnl_right.setBackground(new Color(192, 192, 192));
+        pnl_right.setOpaque(true);
+
+        pnl_right_container.add(pnl_right, BorderLayout.CENTER);
+
+        pnl_view_all_customers = new ViewCustomersPanel();
+        pnl_right.add(pnl_view_all_customers, "View All Customers");
 
         // adding elements to layout
 
