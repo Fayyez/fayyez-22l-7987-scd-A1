@@ -1,4 +1,4 @@
-1Phase,5,0,17,150
-1Phase,15,0,20,250
-3Phase,8,12,17,150
-3Phase,18,25,20,250
+1Phase Domestic,6,3,2.00,20
+1Phase Commercial,15,0,0.00,20
+3Phase Domestic,8,12,17.00,150
+3Phase Commercial,18,25,20.00,250

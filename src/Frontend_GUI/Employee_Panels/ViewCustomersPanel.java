@@ -23,7 +23,6 @@ public class ViewCustomersPanel extends JPanel {
     public ViewCustomersPanel() {
         init();
     }
-
     public void init() {
         setLayout(new BorderLayout());
 
@@ -74,7 +73,6 @@ public class ViewCustomersPanel extends JPanel {
         // Add search functionality
         txt_searchbar.addActionListener(e -> searchCustomers()); // Trigger search on pressing Enter
     }
-
     // Method to load all customers and display them in the table
     private void loadAllCustomers() {
         try {
@@ -85,7 +83,6 @@ public class ViewCustomersPanel extends JPanel {
             e.printStackTrace();
         }
     }
-
     // Method to update the table with the list of customers
     private void updateTable(ArrayList<Customer> customers) {
         tableModel.setRowCount(0); // Clear the table
@@ -95,7 +92,6 @@ public class ViewCustomersPanel extends JPanel {
             tableModel.addRow(new Object[]{c.getId(), c.getCnic(), c.getName(), c.getAddress(), c.getPhone(), meterType, isDomestic, "Update", "Remove"});
         }
     }
-
     // Method to search customers based on the search bar input
     private void searchCustomers() {
         String searchText = txt_searchbar.getText().toLowerCase();
@@ -111,13 +107,10 @@ public class ViewCustomersPanel extends JPanel {
         }
         updateTable(filteredCustomers);
     }
-
-    // Method to save the updated customer list
     private void saveCustomers() {
         CustomerManager.writeCustomerInfo(allCustomers); // Save customers back to file
         JOptionPane.showMessageDialog(this, "Changes saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
-
     // Method to update a customer (to be implemented)
     private void updateCustomer(int row) {
         int customerId = (int) tableModel.getValueAt(row, 0);
@@ -131,13 +124,24 @@ public class ViewCustomersPanel extends JPanel {
                     // replace that customer with the new data from that row of the table
                     Customer updated_cust;
                     if(c instanceof OnePhaseCust) {
-
+                        // copy the data from table into the customer object and save
+                        // String[] columnNames = {"ID", "CNIC", "Name", "Address", "Phone", "Type", "Domestic/Commercial", "Update", "Remove"};
+                        updated_cust = new OnePhaseCust(c.getId(),
+                                                        Double.parseDouble((String) tableModel.getValueAt(row, 1)),
+                                                        (String) tableModel.getValueAt(row, 2),
+                                                        (String) tableModel.getValueAt(row, 3),
+                                                        (String) tableModel.getValueAt(row, 4),
+                                                        ((String) tableModel.getValueAt(row, 6)).equalsIgnoreCase("Domestic"),
+                                                        c.getConnectionDateObj(),
+                                                        c.getUnitsConsumed()
+                                        );
                     } else {
                         // open a dialog to edit the customer info
                         // update the customer in the list
                         // update the table
                         // save the changes
                     }
+                    break;// update and break the loop
                 }
             }
         } catch (FileNotFoundException e) {
