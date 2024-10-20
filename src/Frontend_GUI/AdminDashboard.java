@@ -1,10 +1,11 @@
 package Frontend_GUI;
 
-import Frontend_GUI.Employee_Panels.ViewCustomersPanel;
+import Frontend_GUI.Employee_Panels.*;
 import models.Employee;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
@@ -103,13 +104,22 @@ public class AdminDashboard extends JFrame {
         pnl_right.setOpaque(true);
 
         pnl_right_container.add(pnl_right, BorderLayout.CENTER);
+        // setting up panels and default panel to be shown and add to the pnl_right
+        this.SetAllPanelCards();
+        pane_main_split.setRightComponent(pnl_right_container);
+    }
 
+    private void SetAllPanelCards() {
+        // customer management panels
         pnl_view_all_customers = new ViewCustomersPanel();
         pnl_right.add(pnl_view_all_customers, "View All Customers");
+        this.pnl_add_customer = new AddCustomerFormPanel();
+        pnl_view_all_customers = new ViewCustomersPanel();
+        // bill management panels
+        // employee management panels
 
-        // adding elements to layout
-
-        pane_main_split.setRightComponent(pnl_right_container);
+        // showing default panel
+        card_layout_right_pnl.show(pnl_right, "View All Customers");
     }
 
     public void setRightPanelTitle(String title, int alignment) {
@@ -141,9 +151,41 @@ public class AdminDashboard extends JFrame {
         // adding elements
         pane_tabs = new JTabbedPane();
         pane_tabs.addTab("Actions", pnl_left);
-
+        this.addActionButtonsFunctionality();
         pane_main_split.setLeftComponent(pane_tabs);
 
+    }
+
+    private void addActionButtonsFunctionality() {
+        // customer management panels
+        addPanelAction(btn_view_all_customers_table, new ViewCustomersPanel(), "View All Customers", "View All Customers");
+        addPanelAction(btn_add_customer, new AddCustomerFormPanel(), "Add Customer", "Add Customer");
+        addPanelAction(btn_nadra_cnic_info_table, new ViewNAdraCNICInfoPanel(), "NADRA CNIC Info", "NADRA CNIC Info");
+        // bill management panels
+        addPanelAction(btn_view_all_bills_table, new ViewBillsPanel(), "View All Bills", "View All Bills");
+        addPanelAction(btn_add_bill, new AddBillFormPanel(), "Add Bill", "Add Bill");
+        addPanelAction(btn_view_bill, new ViewBillPanel(), "View Bill", "View Bill");
+        addPanelAction(btn_tax_info_table, new TaxInfoPanel(), "Tax Info", "Tax Info");
+        // employee management panels
+        addPanelAction(btn_add_employee, new AddEmployeeFormPanel(), "Add Employee", "Add Employee");
+        addPanelAction(btn_update_password, new UpdatePasswordPanel(), "Update Password", "Update Password");
+        // logout functionality
+        btn_logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Admin logged out");
+                dispose();
+                new LoginPage();
+            }
+        });
+    }
+
+    private void addPanelAction(JButton button, JPanel panel, String panelName, String title) {
+        button.addActionListener(e -> {
+            pnl_right.add(panel, panelName);
+            card_layout_right_pnl.show(pnl_right, panelName);
+            setRightPanelTitle(title, JLabel.CENTER);
+        });
     }
 
     private void setAllMenuButtons() {
@@ -199,7 +241,6 @@ public class AdminDashboard extends JFrame {
         pnl_left.add(new JLabel());
         pnl_left.add(btn_logout);
     }
-
 
     public static void main(String[] args) {
         new AdminDashboard(new Employee("shazia", "420"));
