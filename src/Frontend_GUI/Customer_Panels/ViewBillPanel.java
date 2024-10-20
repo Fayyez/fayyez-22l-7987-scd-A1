@@ -94,7 +94,6 @@ public class ViewBillPanel extends JPanel {
         this.add(pnlContent, BorderLayout.CENTER);
     }
 
-    // Utility method to create a panel with a title and border
     private JPanel createInfoPanel(String title, Font headingFont, Font labelFont) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 2, 5, 5)); // Two-column layout

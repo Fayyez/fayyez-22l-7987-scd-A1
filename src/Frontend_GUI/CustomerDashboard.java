@@ -62,9 +62,11 @@ public class CustomerDashboard extends JFrame {
     private void setButtonActions() {
         // setting up the button actions
         btn_view_current_bill.addActionListener(e -> {
+            pnl_view_bill = new ViewBillPanel(user);
             card_layout_main.show(pnl_right, "view_bill");
         });
         btn_update_cnic_expiry.addActionListener(e -> {
+            pnl_update_cnic = new UpdateCNICPanel(user);
             card_layout_main.show(pnl_right, "update_cnic");
         });
         btn_logout.addActionListener(e -> {
@@ -79,8 +81,8 @@ public class CustomerDashboard extends JFrame {
         this.pane_tabs = new JTabbedPane();
         // create the panel with alll action buttons
         this.pnl_left = new JPanel();
-        pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        pnl_left.setLayout(new GridLayout(15,1,4,1));
+        pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        pnl_left.setLayout(new GridLayout(18,1,4,1));
         pnl_left.setBackground(Color.BLACK);
         // setting up all the buttons and adding to the panel
         btn_view_current_bill = new JButton("View Bill");
@@ -89,6 +91,7 @@ public class CustomerDashboard extends JFrame {
         btn_update_cnic_expiry.setHorizontalAlignment(SwingConstants.CENTER);
         btn_logout = new JButton("Logout");
         btn_logout.setHorizontalAlignment(SwingConstants.CENTER);
+        btn_logout.setBackground(Color.RED);
         // TODO: add button actions on the nav bar
         // adding all the buttons to the panel
         JLabel lbl_welcome = new JLabel("Welcome, " + user.getName());

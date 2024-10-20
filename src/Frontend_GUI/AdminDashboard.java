@@ -1,6 +1,8 @@
 package Frontend_GUI;
 
 import models.Employee;
+
+import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -18,13 +20,27 @@ public class AdminDashboard extends JFrame {
     private JPanel pnl_left;
     private JPanel pnl_right_container;
     private JPanel pnl_right;
-    private CardLayout card_layout_right;
+    private CardLayout card_layout_right_pnl;
 
     // left panel buttons
     private JLabel lbl_heading;
-    private JButton btn_view_customers;
+    private JLabel lbl_heading_customer_management;
+    private JButton btn_view_all_customers_table;
+    private JButton btn_add_customer;
+    private JButton btn_nadra_cnic_info_table;
+    private JLabel lbl_heading_bill_management;
+    private JButton btn_view_all_bills_table;
+    private JButton btn_add_bill;
+    private JButton btn_view_bill;// view one bill + set to paid
+    private JButton btn_tax_info_table;
+    private JLabel lbl_heading_employee_management;
+    private JButton btn_add_employee;
+    private JButton btn_update_password;
+    private JButton btn_logout;
 
     // right panel stuff here
+    private JLabel lbl_right_panel_title;
+    private BorderLayout border_layout_right_pnl;
 
     public AdminDashboard(Employee user) {
         this.user = user;
@@ -44,19 +60,123 @@ public class AdminDashboard extends JFrame {
         pane_main_split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         pane_main_split.setDividerLocation(200);
         // sset left panel with all the options
-        pane_tabs = new JTabbedPane();
-        pnl_left = new JPanel();
+        setUpLeftPanel();
         // set right panel
+        setUpRightPanel();
+        
         // set all actioin buttons just like customer dashboard
 
         setContentPane(pane_main_split);
 
     }
 
-    private void setUPleftPanel() {
+    private void setUpRightPanel() {
+        // create border layout in right panel container wala and then
+        // add pnl_right to below
+        pnl_right_container = new JPanel();
+        border_layout_right_pnl = new BorderLayout();
+        pnl_right_container.setLayout(border_layout_right_pnl);
+        // setting up the right panel elements
+        lbl_right_panel_title = new JLabel("Customers Data", JLabel.CENTER);// all customers is the default card to be shown on the screen when panel is opened
+        lbl_right_panel_title.setFont(new Font("Arial", Font.BOLD, 20));
 
+        card_layout_right_pnl = new CardLayout();
+        pnl_right = new JPanel();
+        pnl_right.setLayout(card_layout_right_pnl);
+
+        // adding elements to layout
+
+        pane_main_split.setRightComponent(pnl_right_container);
+    }
+
+    public void setRightPanelTitle(String title, int alignment) {
+        // set the title of the right panel\
+        lbl_right_panel_title.setText(title);
+        lbl_right_panel_title.setHorizontalAlignment(alignment);
+    }
+
+    private void setUpLeftPanel() {
+        // main panle layout
+        pnl_left = new JPanel();
+        pnl_left.setLayout(new GridLayout(18, 1, 4, 0));
+        pnl_left.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        pnl_left.setBackground(Color.BLACK);
+
+        /// panel elements ///
+        // heading
+        lbl_heading = new JLabel("Admin Panel", JLabel.CENTER);
+        lbl_heading.setFont(new Font("Arial", Font.BOLD, 18));
+        lbl_heading.setForeground(Color.WHITE);
+        lbl_heading.setBackground(Color.LIGHT_GRAY);
+        lbl_heading.setIcon(  new ImageIcon(new ImageIcon("src/Assets/logo.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
+        lbl_heading.setHorizontalTextPosition(JLabel.TRAILING);
+        lbl_heading.setIconTextGap(4);
+        lbl_heading.setOpaque(true);
+        // adding action buttons
+        this.setAllMenuButtons();
+        // adding elements
+        pane_tabs = new JTabbedPane();
+        pane_tabs.addTab("Actions", pnl_left);
+
+        pane_main_split.setLeftComponent(pane_tabs);
 
     }
+
+    private void setAllMenuButtons() {
+        // Initializing all Headings and subheadings
+        lbl_heading_customer_management = new JLabel("Customer Management", JLabel.LEFT);
+        lbl_heading_customer_management.setFont(new Font("Arial", Font.ITALIC, 14));
+        lbl_heading_bill_management = new JLabel("Bill Management", SwingConstants.LEFT);
+        lbl_heading_bill_management.setFont(new Font("Arial", Font.ITALIC,14));
+        lbl_heading_employee_management = new JLabel("Employee Management", SwingConstants.LEFT);
+        lbl_heading_employee_management.setFont(new Font("Arial", Font.ITALIC, 14));
+
+        lbl_heading.setForeground(Color.WHITE);
+        lbl_heading_customer_management.setForeground(Color.WHITE);
+        lbl_heading_bill_management.setForeground(Color.WHITE);
+        lbl_heading_employee_management.setForeground(Color.WHITE);
+
+        // Initializing all buttons
+        btn_view_all_customers_table = new JButton("View All Customers");
+        btn_add_customer = new JButton("Add Customer");
+        btn_nadra_cnic_info_table = new JButton("NADRA CNIC Info");
+
+        btn_view_all_bills_table = new JButton("View All Bills");
+        btn_add_bill = new JButton("Add Bill");
+        btn_view_bill = new JButton("View Bill");
+        btn_tax_info_table = new JButton("Tax Info");
+
+        btn_add_employee = new JButton("Add Employee");
+        btn_update_password = new JButton("Update Password");
+
+        btn_logout = new JButton("Logout");
+        btn_logout.setBackground(Color.RED);
+
+        // Adding components to the left panel
+        pnl_left.add(lbl_heading);
+        pnl_left.add(lbl_heading_customer_management);
+        pnl_left.add(btn_view_all_customers_table);
+        pnl_left.add(btn_add_customer);
+        pnl_left.add(btn_nadra_cnic_info_table);
+
+        pnl_left.add(lbl_heading_bill_management);
+        pnl_left.add(btn_view_all_bills_table);
+        pnl_left.add(btn_add_bill);
+        pnl_left.add(btn_view_bill);
+        pnl_left.add(btn_tax_info_table);
+
+        pnl_left.add(lbl_heading_employee_management);
+        pnl_left.add(btn_add_employee);
+        pnl_left.add(btn_update_password);
+        // add 3 dummy elements
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(btn_logout);
+    }
+
 
     public static void main(String[] args) {
         new AdminDashboard(new Employee("shazia", "420"));
