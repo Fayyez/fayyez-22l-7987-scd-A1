@@ -23,6 +23,7 @@ public class CustomerManager {
                 boolean is_domestic = Boolean.parseBoolean(data[5]);
                 String meter_type = data[6];
                 String connection_date_string = data[7];
+                Date connection_date = DateBuilder.getDateobj(connection_date_string);
                 int units_consumed = Integer.parseInt(data[8]);
                 int peak_units_consumed = Integer.parseInt(data[9]);
                 // create appropriate customer object based on the meter type
@@ -47,7 +48,9 @@ public class CustomerManager {
             for (Customer cust : customers) {
                 String meter_type = cust instanceof OnePhaseCust ? "single" : "three";
                 int peak_units_consumed = cust instanceof ThreePhaseCust ? ((ThreePhaseCust) cust).getPeakUnitsConsumed() : 0;
-                String entry = cust.getId() + "," + cust.getCnic() + "," + cust.getName() + "," + cust.getAddress() + "," + cust.getPhone() + "," + cust.getIsDomesticStr() + "," + meter_type + "," + cust.getConnectionDate() + "," + cust.getUnitsConsumed() + "," + peak_units_consumed;
+                String entry = cust.getId() + "," + cust.getCnic() + "," + cust.getName() + "," + cust.getAddress() + "," + cust.getPhone() + "," + cust.getIsDomesticStr() + "," + meter_type + "," + DateBuilder.getDateStr(cust.getConnectionDateObj()) + "," + cust.getUnitsConsumed() + "," + peak_units_consumed;
+                bw.write(entry);
+                bw.newLine();
             }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to customers file");
@@ -93,6 +96,42 @@ public class CustomerManager {
         }
         for(Customer c: customers) {
             if(c.getId() == id && c.getCnic() == cnic) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Customer not found");
+    }
+    public static Customer getCustomer(int id) {
+        ArrayList<Customer> customers = new ArrayList<>();
+        try {// read all the cusomters in a list
+            CustomerManager.getListOfCustomers(customers);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        for(Customer c: customers) {
+            if(c.getId() == id) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Customer not found");
+    }
+    public static Customer getCustomer(ArrayList<Customer> customers, int id) {
+        for(Customer c: customers) {
+            if(c.getId() == id) {
+                return c;
+            }
+        }
+        throw new IllegalArgumentException("Customer not found");
+    }
+    public static Customer getCustomer(int id, String username) {
+        ArrayList<Customer> customers = new ArrayList<>();
+        try {// read all the customers in a list
+            CustomerManager.getListOfCustomers(customers);
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        for(Customer c: customers) {
+            if(c.getId() == id && c.getName().equalsIgnoreCase(username)) {
                 return c;
             }
         }

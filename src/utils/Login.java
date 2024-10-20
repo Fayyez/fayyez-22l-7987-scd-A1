@@ -17,12 +17,30 @@ public class Login {
         System.out.println("<ENTER 3> to Exit");
         System.out.println("here: ");
     }
-    public static Customer LoginCustomer() {
-        showLoginMessage();//display login menu
+    public static User LetsLogin() throws Exception {
+        // this method is responsible for logging in the user
+        // it calls the showLoginMessage() method to display the login screen
+        // and then takes the user input and calls the appropriate login method
+        // and returns the user object
+        showLoginMessage();
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
+        if(choice == 1) {
+            return LoginCustomer();
+        }
+        else if(choice == 2) {
+            return LoginEmployee();
+        }
+        else if(choice == 3) {
+            System.out.println("GOODBYE!!! Phir milein ge chalte chalte......");
+            System.exit(0);
+        }
+        return null;
+    }
+    public static Customer LoginCustomer() {
+        Scanner scanner = new Scanner(System.in);
         // get id and cnic number. id must be 4 digit integer and cnic must be 13 digit double
-        System.out.println("Enter your ID: ");
+        System.out.println("Enter your customer ID: ");
         int id = scanner.nextInt();
         System.out.println("Enter your CNIC: ");
         double cnic = scanner.nextDouble();
@@ -31,10 +49,18 @@ public class Login {
             System.out.println("ID must be a 4 digit number");
             return null;
         }
-        else if (cnic>9999999999999L||cnic<1000000000000L) {
+        else if (cnic > 9999999999999L || cnic < 1000000000000L) {
             System.out.println("CNIC must be a 13 digit number");
             return null;
         }
         return CustomerManager.getCustomer(id, cnic);
+    }
+    public static Employee LoginEmployee() throws Exception {
+        System.out.println("Enter username: ");
+        Scanner scanner = new Scanner(System.in);
+        String username = scanner.nextLine();
+        System.out.println("Enter password: ");
+        String password = scanner.nextLine();
+        return EmployeeManager.getEmployee(username, password);
     }
 }
