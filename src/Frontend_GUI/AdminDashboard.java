@@ -89,7 +89,7 @@ public class AdminDashboard extends JFrame {
         border_layout_right_pnl = new BorderLayout();
         pnl_right_container.setLayout(border_layout_right_pnl);
         // setting up the right panel elements
-        lbl_right_panel_title = new JLabel("Customers Data", JLabel.CENTER);// all customers is the default card to be shown on the screen when panel is opened
+        lbl_right_panel_title = new JLabel("View All Customers", JLabel.CENTER);// all customers is the default card to be shown on the screen when panel is opened
         lbl_right_panel_title.setFont(new Font("Arial", Font.BOLD, 20));
         lbl_right_panel_title.setPreferredSize(new Dimension(0, 50));
         lbl_right_panel_title.setBackground(Color.BLUE);
@@ -168,7 +168,7 @@ public class AdminDashboard extends JFrame {
         addPanelAction(btn_tax_info_table, new TaxInfoPanel(), "Tax Info", "Tax Info");
         // employee management panels
         addPanelAction(btn_add_employee, new AddEmployeeFormPanel(), "Add Employee", "Add Employee");
-        addPanelAction(btn_update_password, new UpdatePasswordPanel(), "Update Password", "Update Password");
+        addPanelAction(btn_update_password, new UpdatePasswordPanel(user), "Update Password", "Update Password");
         // logout functionality
         btn_logout.addActionListener(new ActionListener() {
             @Override
