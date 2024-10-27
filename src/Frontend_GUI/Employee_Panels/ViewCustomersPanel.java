@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import models.Customer;
 import models.OnePhaseCust;
+import models.ThreePhaseCust;
 import utils.CustomerManager;
 
 public class ViewCustomersPanel extends JPanel {
@@ -120,30 +121,41 @@ public class ViewCustomersPanel extends JPanel {
         try {
             CustomerManager.getListOfCustomers(temp_customers);
             for (Customer c : temp_customers) {
-                if (c.getId() == customerId) {
-                    // replace that customer with the new data from that row of the table
+                if (c.getId() == customerId) {// replace that customer with the new data from that row of the table
                     Customer updated_cust;
                     if(c instanceof OnePhaseCust) {
                         // copy the data from table into the customer object and save
                         // String[] columnNames = {"ID", "CNIC", "Name", "Address", "Phone", "Type", "Domestic/Commercial", "Update", "Remove"};
                         updated_cust = new OnePhaseCust(c.getId(),
-                                                        Double.parseDouble((String) tableModel.getValueAt(row, 1)),
+                                                        (Double) tableModel.getValueAt(row, 1),
                                                         (String) tableModel.getValueAt(row, 2),
                                                         (String) tableModel.getValueAt(row, 3),
                                                         (String) tableModel.getValueAt(row, 4),
-                                                        ((String) tableModel.getValueAt(row, 6)).equalsIgnoreCase("Domestic"),
+                                                        ((String) tableModel.getValueAt(row, 6)).equalsIgnoreCase("domestic"),
                                                         c.getConnectionDateObj(),
                                                         c.getUnitsConsumed()
                                         );
                     } else {
-                        // open a dialog to edit the customer info
-                        // update the customer in the list
-                        // update the table
-                        // save the changes
+                        updated_cust = new ThreePhaseCust(c.getId(),
+                                                        (Double) tableModel.getValueAt(row, 1),
+                                                        (String) tableModel.getValueAt(row, 2),
+                                                        (String) tableModel.getValueAt(row, 3),
+                                                        (String) tableModel.getValueAt(row, 4),
+                                                        ((String) tableModel.getValueAt(row, 6)).equalsIgnoreCase("domestic"),
+                                                        c.getConnectionDateObj(),
+                                                        c.getUnitsConsumed(),
+                                                        ((ThreePhaseCust) c).getPeakUnitsConsumed()
+                                        );
                     }
+                    int index = temp_customers.indexOf(c);
+                    temp_customers.set(index, updated_cust);
                     break;// update and break the loop
                 }
             }
+            // now write these changes in all customers
+            allCustomers = temp_customers;
+            updateTable(allCustomers);
+            saveCustomers();
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Error loading customer data", "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws Exception {
-        TerminalApp app = new TerminalApp();
+        GUIApp app = new GUIApp();
         app.start();
     }
 }

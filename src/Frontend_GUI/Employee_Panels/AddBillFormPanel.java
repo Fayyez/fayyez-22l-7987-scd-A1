@@ -1,9 +1,13 @@
 package Frontend_GUI.Employee_Panels;
 
 import models.Bill;
+import models.Customer;
+import models.OnePhaseCust;
+import models.ThreePhaseCust;
 import utils.BillManager;
 import utils.CustomerManager;
 import utils.DateBuilder;
+import utils.TaxManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AddBillFormPanel extends JPanel {
-    private JTextField customerIdField, regReadingField, peakReadingField, costField, taxField, fixedChargesField, totalBillField;
+    private JTextField customerIdField, regReadingField, peakReadingField;
     private JSpinner readingDateSpinner;
     private JButton saveButton;
     private JCheckBox paidStatusCheckbox;
@@ -72,50 +76,6 @@ public class AddBillFormPanel extends JPanel {
         gbc.gridy = 3;
         add(readingDateSpinner, gbc);
 
-        // Cost of Electricity
-        JLabel costLabel = new JLabel("Cost of Electricity:");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        add(costLabel, gbc);
-
-        costField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        add(costField, gbc);
-
-        // Sales Tax Amount
-        JLabel taxLabel = new JLabel("Sales Tax Amount:");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        add(taxLabel, gbc);
-
-        taxField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        add(taxField, gbc);
-
-        // Fixed Charges
-        JLabel fixedChargesLabel = new JLabel("Fixed Charges:");
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        add(fixedChargesLabel, gbc);
-
-        fixedChargesField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        add(fixedChargesField, gbc);
-
-        // Total Billing Amount
-        JLabel totalBillLabel = new JLabel("Total Billing Amount:");
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        add(totalBillLabel, gbc);
-
-        totalBillField = new JTextField(15);
-        gbc.gridx = 1;
-        gbc.gridy = 7;
-        add(totalBillField, gbc);
-
         // Paid Status Checkbox
         JLabel paidStatusLabel = new JLabel("Paid Status:");
         gbc.gridx = 0;
@@ -147,15 +107,28 @@ public class AddBillFormPanel extends JPanel {
     // Method to handle adding a new bill
     private void addBill() {
         try {
+            TaxManager taxManager = TaxManager.getInstance();
             // Get form values
             int customerId = Integer.parseInt(customerIdField.getText());
             int regReading = Integer.parseInt(regReadingField.getText());
             int peakReading = Integer.parseInt(peakReadingField.getText());
             Date readingDate = (Date) readingDateSpinner.getValue();
-            int cost = Integer.parseInt(costField.getText());
-            float taxAmount = Float.parseFloat(taxField.getText());
-            int fixedCharges = Integer.parseInt(fixedChargesField.getText());
-            int totalBill = Integer.parseInt(totalBillField.getText());
+            int index = 0;
+            Customer c = CustomerManager.getCustomer(customerId);
+            int unitsComsumed = regReading - c.getUnitsConsumed();
+            int peakUnitsConsumed = 0;
+            if(c instanceof OnePhaseCust) {
+                index = taxManager.get1phaseDomesticIndex();
+            }
+            else {
+                index = taxManager.get3phaseDomesticIndex();
+                peakUnitsConsumed = peakReading - ((ThreePhaseCust) c).getPeakUnitsConsumed();
+            }
+            if(!c.getIsDomestic()) index++;
+            int cost = taxManager.getRegUnitPrice(index) * unitsComsumed + taxManager.getPeakUnitPrice(index) * peakUnitsConsumed;
+            float taxAmount = cost * taxManager.getTaxPercentage(index)/100;
+            int fixedCharges = taxManager.getFixedCharge(index);
+            int totalBill = cost + (int) taxAmount + fixedCharges;
             boolean isPaid = paidStatusCheckbox.isSelected();
 
             // Validate reading date (cannot be in future)
@@ -187,10 +160,6 @@ public class AddBillFormPanel extends JPanel {
             customerIdField.setText("");
             regReadingField.setText("");
             peakReadingField.setText("");
-            costField.setText("");
-            taxField.setText("");
-            fixedChargesField.setText("");
-            totalBillField.setText("");
             readingDateSpinner.setValue(new Date());
             paidStatusCheckbox.setSelected(false);
 

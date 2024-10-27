@@ -6,6 +6,8 @@ import utils.DateBuilder;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +44,12 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
         cnicTable.setRowHeight(30);
         JScrollPane scrollPane = new JScrollPane(cnicTable);
 
+        // ** Changes Start Here **
+        // Set custom renderer and editor for the "Edit" button column
+        cnicTable.getColumnModel().getColumn(2).setCellRenderer(new ButtonRenderer());
+        cnicTable.getColumnModel().getColumn(2).setCellEditor(new ButtonEditor(new JCheckBox()));
+        // ** Changes End Here **
+
         // Save button
         JButton saveButton = new JButton("Save Changes");
         saveButton.addActionListener(new ActionListener() {
@@ -77,7 +85,7 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
                 Object[] rowData = {
                         cnic.getNumber(),
                         cnic.getDateStr(),
-                        createEditButton(cnic)
+                        "Edit" // Button text placeholder
                 };
                 tableModel.addRow(rowData);
                 highlightExpiringRows(cnic);
@@ -97,18 +105,6 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // Create an edit button for each row
-    private JButton createEditButton(Cnic cnic) {
-        JButton editButton = new JButton("Edit");
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editCnic(cnic);
-            }
-        });
-        return editButton;
     }
 
     // Edit CNIC expiry date only
@@ -135,7 +131,7 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
                 Object[] rowData = {
                         cnic.getNumber(),
                         cnic.getDateStr(),
-                        createEditButton(cnic)
+                        "Edit" // Button text placeholder
                 };
                 tableModel.addRow(rowData);
                 highlightExpiringRows(cnic);
@@ -157,7 +153,7 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
                     Object[] rowData = {
                             cnic.getNumber(),
                             cnic.getDateStr(),
-                            createEditButton(cnic)
+                            "Edit" // Button text placeholder
                     };
                     tableModel.addRow(rowData);
                     highlightExpiringRows(cnic);
@@ -183,5 +179,68 @@ public class ViewNAdraCNICInfoPanel extends JPanel {
     // Show error dialog
     private void showErrorDialog(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Custom renderer for the "Edit" button column
+    private class ButtonRenderer extends JButton implements TableCellRenderer {
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            setText((value == null) ? "Edit" : value.toString());
+            return this;
+        }
+    }
+
+    // Custom editor for the "Edit" button column
+    private class ButtonEditor extends DefaultCellEditor {
+        private JButton button;
+        private boolean isPushed;
+
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton("Edit");
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected, int row, int column) {
+            button.setText((value == null) ? "Edit" : value.toString());
+            isPushed = true;
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                int row = cnicTable.getSelectedRow();
+                Cnic cnic = cnics.get(row);
+                editCnic(cnic); // Invoke editCnic with the selected Cnic
+            }
+            isPushed = false;
+            return "Edit";
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+
+        @Override
+        protected void fireEditingStopped() {
+            super.fireEditingStopped();
+        }
     }
 }

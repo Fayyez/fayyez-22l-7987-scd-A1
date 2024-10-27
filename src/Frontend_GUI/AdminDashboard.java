@@ -134,13 +134,13 @@ public class AdminDashboard extends JFrame {
         pnl_left.setLayout(new GridLayout(18, 1, 4, 0));
         pnl_left.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        pnl_left.setBackground(Color.BLACK);
+        pnl_left.setBackground(new Color(245, 236, 223));
 
         /// panel elements ///
         // heading
         lbl_heading = new JLabel("Admin Panel", JLabel.CENTER);
         lbl_heading.setFont(new Font("Arial", Font.BOLD, 18));
-        lbl_heading.setForeground(Color.WHITE);
+        lbl_heading.setForeground(Color.black);
         lbl_heading.setBackground(Color.LIGHT_GRAY);
         lbl_heading.setIcon(  new ImageIcon(new ImageIcon("src/Assets/logo.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         lbl_heading.setHorizontalTextPosition(JLabel.TRAILING);
@@ -252,10 +252,10 @@ public class AdminDashboard extends JFrame {
         lbl_heading_employee_management = new JLabel("Employee Management", SwingConstants.LEFT);
         lbl_heading_employee_management.setFont(new Font("Arial", Font.ITALIC, 14));
 
-        lbl_heading.setForeground(Color.WHITE);
-        lbl_heading_customer_management.setForeground(Color.WHITE);
-        lbl_heading_bill_management.setForeground(Color.WHITE);
-        lbl_heading_employee_management.setForeground(Color.WHITE);
+        lbl_heading.setForeground(Color.black);
+        lbl_heading_customer_management.setForeground(Color.black);
+        lbl_heading_bill_management.setForeground(Color.black);
+        lbl_heading_employee_management.setForeground(Color.black);
 
         // Initializing all buttons
         btn_view_all_customers_table = new JButton("View All Customers");

@@ -20,7 +20,7 @@ public class CustomerManager {
                 String name = data[2];
                 String address = data[3];
                 String phone = data[4];
-                boolean is_domestic = Boolean.parseBoolean(data[5]);
+                boolean is_domestic = data[5].equalsIgnoreCase("domestic");
                 String meter_type = data[6];
                 String connection_date_string = data[7];
                 Date connection_date = DateBuilder.getDateobj(connection_date_string);

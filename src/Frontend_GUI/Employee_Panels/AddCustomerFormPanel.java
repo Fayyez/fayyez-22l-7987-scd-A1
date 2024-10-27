@@ -29,6 +29,7 @@ public class AddCustomerFormPanel extends JPanel {
 
     public void init() {
         setLayout(new GridLayout(10, 2, 5, 5));
+        setBorder(BorderFactory.createEmptyBorder(80, 0, 60, 170));
 
         // Initializing fields
         txtName = new JTextField();
@@ -41,29 +42,32 @@ public class AddCustomerFormPanel extends JPanel {
         txtUnitsConsumed = new JTextField();
         txtPeakUnitsConsumed = new JTextField();
         btnSubmit = new JButton("Add Customer");
-        lblStatus = new JLabel("");
+        btnSubmit.setBackground(Color.GREEN);
+        btnSubmit.setFocusPainted(true);
+        lblStatus = new JLabel("", SwingConstants.CENTER);
 
         // Add components to panel
-        add(new JLabel("Name:"));
+        add(new JLabel("Name:    ", SwingConstants.RIGHT));
         add(txtName);
-        add(new JLabel("CNIC:"));
+        add(new JLabel("CNIC:    ", SwingConstants.RIGHT));
         add(txtCNIC);
-        add(new JLabel("Address:"));
+        add(new JLabel("Address:    ", SwingConstants.RIGHT));
         add(txtAddress);
-        add(new JLabel("Phone Number:"));
+        add(new JLabel("Phone Number:    ", SwingConstants.RIGHT));
         add(txtPhoneNumber);
-        add(new JLabel("Meter Type:"));
+        add(new JLabel("Meter Type:    ", SwingConstants.RIGHT));
         add(cmbMeterType);
-        add(new JLabel("Is Domestic:"));
+        add(new JLabel("Is Domestic:    ", SwingConstants.RIGHT));
         add(chkIsDomestic);
-        add(new JLabel("Connection Date:"));
+        add(new JLabel("Connection Date:    ", SwingConstants.RIGHT));
         add(spnConnectionDate);
-        add(new JLabel("Units Consumed:"));
-        add(txtUnitsConsumed);
-        add(new JLabel("Peak Units Consumed (if three-phase):"));
-        add(txtPeakUnitsConsumed);
-        add(btnSubmit);
+//        add(new JLabel("Units Consumed:", SwingConstants.RIGHT));
+//        add(txtUnitsConsumed);
+//        add(new JLabel("Peak Units Consumed (if three-phase):", SwingConstants.RIGHT));
+//        add(txtPeakUnitsConsumed);
         add(lblStatus);
+        add(btnSubmit);
+
 
         // Add button action listener
         btnSubmit.addActionListener(new ActionListener() {
@@ -75,19 +79,19 @@ public class AddCustomerFormPanel extends JPanel {
     }
 
     private void addCustomer() {
-        // Retrieve form values
-        String name = txtName.getText();
-        double cnic = Double.parseDouble(txtCNIC.getText());
-        String address = txtAddress.getText();
-        String phoneNumber = txtPhoneNumber.getText();
-        String meterType = (String) cmbMeterType.getSelectedItem();
-        boolean isDomestic = chkIsDomestic.isSelected();
-        Date connectionDate = (Date) spnConnectionDate.getValue();
-        int unitsConsumed = Integer.parseInt(txtUnitsConsumed.getText());
-        int peakUnitsConsumed = meterType.equals("Three") ? Integer.parseInt(txtPeakUnitsConsumed.getText()) : 0;
-
         // Try adding customer using CustomerManager
         try {
+            // Retrieve form values
+            String name = txtName.getText();
+            double cnic = Double.parseDouble(txtCNIC.getText());
+            String address = txtAddress.getText();
+            String phoneNumber = txtPhoneNumber.getText();
+            String meterType = (String) cmbMeterType.getSelectedItem();
+            boolean isDomestic = chkIsDomestic.isSelected();
+            Date connectionDate = (Date) spnConnectionDate.getValue();
+            int unitsConsumed = 0;
+            int peakUnitsConsumed = 0;
+
             boolean success = CustomerManager.addNewCustomerToFile(cnic, name, address, phoneNumber, isDomestic, meterType, connectionDate, unitsConsumed, peakUnitsConsumed);
             if (success) {
                 lblStatus.setText("Customer added successfully.");
