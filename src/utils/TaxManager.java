@@ -10,6 +10,11 @@ public class TaxManager { // is a singleton class
     private float[] taxPercentages;
     private int[] fixedCharges;
     private final static String filepath = "src/database/taxInfo.txt";
+    // constant static vars
+    static final int ONE_PHASE_DOMESTIC = 0;
+    static final int ONE_PHASE_COMMERCIAL = 1;
+    static final int THREE_PHASE_DOMESTIC = 2;
+    static final int THREE_PHASE_COMMERCIAL = 3;
 
     // Private constructor for singleton pattern
     private TaxManager() {
@@ -17,7 +22,10 @@ public class TaxManager { // is a singleton class
         peakUnitPrices = new int[4];
         taxPercentages = new float[4];
         fixedCharges = new int[4];
+        loadData();
+    }
 
+    public void loadData() {
         try {
             FileReader fr = new FileReader(filepath);
             BufferedReader br = new BufferedReader(fr);
@@ -35,13 +43,12 @@ public class TaxManager { // is a singleton class
                 // Only add peak unit price if it's a 3-phase meter row
                 if (data[0].startsWith("3Phase")) {
                     peakUnitPrices[i] = Integer.parseInt(data[2]);
-                    taxPercentages[i] = Float.parseFloat(data[3]);
-                    fixedCharges[i] = Integer.parseInt(data[4]);
-                } else {
-                    peakUnitPrices[i] = 0; // No peak unit price for 1-phase meters
-                    taxPercentages[i] = Float.parseFloat(data[2]);
-                    fixedCharges[i] = Integer.parseInt(data[3]);
                 }
+                else {
+                    peakUnitPrices[i] = 0; // No peak unit price for 1-phase meters
+                }
+                taxPercentages[i] = Float.parseFloat(data[3]);
+                fixedCharges[i] = Integer.parseInt(data[4]);
                 i++;
             }
             br.close();

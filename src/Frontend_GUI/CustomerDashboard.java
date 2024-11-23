@@ -82,8 +82,8 @@ public class CustomerDashboard extends JFrame {
         // create the panel with alll action buttons
         this.pnl_left = new JPanel();
         pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        pnl_left.setLayout(new GridLayout(18,1,4,1));
-        pnl_left.setBackground(Color.BLACK);
+        pnl_left.setLayout(new GridLayout(18,1,1,0));
+        pnl_left.setBackground(new Color(245, 236, 223));
         // setting up all the buttons and adding to the panel
         btn_view_current_bill = new JButton("View Bill");
         btn_view_current_bill.setHorizontalAlignment(SwingConstants.CENTER);
@@ -107,6 +107,20 @@ public class CustomerDashboard extends JFrame {
         pnl_left.add(lbl_welcome);
         pnl_left.add(btn_view_current_bill);
         pnl_left.add(btn_update_cnic_expiry);
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
+        pnl_left.add(new JLabel());
         pnl_left.add(btn_logout);
 
         pane_tabs.addTab("Actions", pnl_left);

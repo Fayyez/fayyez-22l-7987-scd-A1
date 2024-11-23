@@ -134,13 +134,13 @@ public class AdminDashboard extends JFrame {
         pnl_left.setLayout(new GridLayout(18, 1, 4, 0));
         pnl_left.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         pnl_left.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        pnl_left.setBackground(Color.BLACK);
+        pnl_left.setBackground(new Color(245, 236, 223));
 
         /// panel elements ///
         // heading
         lbl_heading = new JLabel("Admin Panel", JLabel.CENTER);
         lbl_heading.setFont(new Font("Arial", Font.BOLD, 18));
-        lbl_heading.setForeground(Color.WHITE);
+        lbl_heading.setForeground(Color.black);
         lbl_heading.setBackground(Color.LIGHT_GRAY);
         lbl_heading.setIcon(  new ImageIcon(new ImageIcon("src/Assets/logo.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         lbl_heading.setHorizontalTextPosition(JLabel.TRAILING);
@@ -158,17 +158,71 @@ public class AdminDashboard extends JFrame {
 
     private void addActionButtonsFunctionality() {
         // customer management panels
-        addPanelAction(btn_view_all_customers_table, new ViewCustomersPanel(), "View All Customers", "View All Customers");
-        addPanelAction(btn_add_customer, new AddCustomerFormPanel(), "Add Customer", "Add Customer");
-        addPanelAction(btn_nadra_cnic_info_table, new ViewNAdraCNICInfoPanel(), "NADRA CNIC Info", "NADRA CNIC Info");
-        // bill management panels
-        addPanelAction(btn_view_all_bills_table, new ViewBillsPanel(), "View All Bills", "View All Bills");
-        addPanelAction(btn_add_bill, new AddBillFormPanel(), "Add Bill", "Add Bill");
-        addPanelAction(btn_view_bill, new ViewBillPanel(), "View Bill", "View Bill");
-        addPanelAction(btn_tax_info_table, new TaxInfoPanel(), "Tax Info", "Tax Info");
-        // employee management panels
-        addPanelAction(btn_add_employee, new AddEmployeeFormPanel(), "Add Employee", "Add Employee");
-        addPanelAction(btn_update_password, new UpdatePasswordPanel(user), "Update Password", "Update Password");
+//        addPanelAction(btn_view_all_customers_table, new ViewCustomersPanel(), "View All Customers", "View All Customers");
+//        addPanelAction(btn_add_customer, new AddCustomerFormPanel(), "Add Customer", "Add Customer");
+//        addPanelAction(btn_nadra_cnic_info_table, new ViewNAdraCNICInfoPanel(), "NADRA CNIC Info", "NADRA CNIC Info");
+//        // bill management panels
+//        addPanelAction(btn_view_all_bills_table, new ViewBillsPanel(), "View All Bills", "View All Bills");
+//        addPanelAction(btn_add_bill, new AddBillFormPanel(), "Add Bill", "Add Bill");
+//        addPanelAction(btn_view_bill, new ViewBillPanel(), "View Bill", "View Bill");
+//        addPanelAction(btn_tax_info_table, new TaxInfoPanel(), "Tax Info", "Tax Info");
+//        // employee management panels
+//        addPanelAction(btn_add_employee, new AddEmployeeFormPanel(), "Add Employee", "Add Employee");
+//        addPanelAction(btn_update_password, new UpdatePasswordPanel(user), "Update Password", "Update Password");
+        btn_view_all_customers_table.addActionListener(e -> {
+            pnl_view_all_customers = new ViewCustomersPanel();
+            pnl_right.add(pnl_view_all_customers, "View All Customers");
+            card_layout_right_pnl.show(pnl_right, "View All Customers");
+            setRightPanelTitle("View All Customers", JLabel.CENTER);
+        });
+        btn_add_customer.addActionListener(e -> {
+            pnl_add_customer = new AddCustomerFormPanel();
+            pnl_right.add(pnl_add_customer, "Add Customer");
+            card_layout_right_pnl.show(pnl_right, "Add Customer");
+            setRightPanelTitle("Add Customer", JLabel.CENTER);
+        });
+        btn_nadra_cnic_info_table.addActionListener(e -> {
+            pnl_nadra_cnic_info = new ViewNAdraCNICInfoPanel();
+            pnl_right.add(pnl_nadra_cnic_info, "NADRA CNIC Info");
+            card_layout_right_pnl.show(pnl_right, "NADRA CNIC Info");
+            setRightPanelTitle("NADRA CNIC Info", JLabel.CENTER);
+        });
+        btn_view_all_bills_table.addActionListener(e -> {
+            pnl_view_all_bills = new ViewBillsPanel();
+            pnl_right.add(pnl_view_all_bills, "View All Bills");
+            card_layout_right_pnl.show(pnl_right, "View All Bills");
+            setRightPanelTitle("View All Bills", JLabel.CENTER);
+        });
+        btn_add_bill.addActionListener(e -> {
+            pnl_add_bill = new AddBillFormPanel();
+            pnl_right.add(pnl_add_bill, "Add Bill");
+            card_layout_right_pnl.show(pnl_right, "Add Bill");
+            setRightPanelTitle("Add Bill", JLabel.CENTER);
+        });
+        btn_view_bill.addActionListener(e -> {
+            pnl_view_bill = new ViewBillPanel();
+            pnl_right.add(pnl_view_bill, "View Bill");
+            card_layout_right_pnl.show(pnl_right, "View Bill");
+            setRightPanelTitle("View Bill", JLabel.CENTER);
+        });
+        btn_tax_info_table.addActionListener(e -> {
+            pnl_tax_info = new TaxInfoPanel();
+            pnl_right.add(pnl_tax_info, "Tax Info");
+            card_layout_right_pnl.show(pnl_right, "Tax Info");
+            setRightPanelTitle("Tax Info", JLabel.CENTER);
+        });
+        btn_add_employee.addActionListener(e -> {
+            pnl_add_employee = new AddEmployeeFormPanel();
+            pnl_right.add(pnl_add_employee, "Add Employee");
+            card_layout_right_pnl.show(pnl_right, "Add Employee");
+            setRightPanelTitle("Add Employee", JLabel.CENTER);
+        });
+        btn_update_password.addActionListener(e -> {
+            pnl_update_password = new UpdatePasswordPanel(user);
+            pnl_right.add(pnl_update_password, "Update Password");
+            card_layout_right_pnl.show(pnl_right, "Update Password");
+            setRightPanelTitle("Update Password", JLabel.CENTER);
+        });
         // logout functionality
         btn_logout.addActionListener(new ActionListener() {
             @Override
@@ -182,6 +236,7 @@ public class AdminDashboard extends JFrame {
 
     private void addPanelAction(JButton button, JPanel panel, String panelName, String title) {
         button.addActionListener(e -> {
+            // remove the panel from card
             pnl_right.add(panel, panelName);
             card_layout_right_pnl.show(pnl_right, panelName);
             setRightPanelTitle(title, JLabel.CENTER);
@@ -197,10 +252,10 @@ public class AdminDashboard extends JFrame {
         lbl_heading_employee_management = new JLabel("Employee Management", SwingConstants.LEFT);
         lbl_heading_employee_management.setFont(new Font("Arial", Font.ITALIC, 14));
 
-        lbl_heading.setForeground(Color.WHITE);
-        lbl_heading_customer_management.setForeground(Color.WHITE);
-        lbl_heading_bill_management.setForeground(Color.WHITE);
-        lbl_heading_employee_management.setForeground(Color.WHITE);
+        lbl_heading.setForeground(Color.black);
+        lbl_heading_customer_management.setForeground(Color.black);
+        lbl_heading_bill_management.setForeground(Color.black);
+        lbl_heading_employee_management.setForeground(Color.black);
 
         // Initializing all buttons
         btn_view_all_customers_table = new JButton("View All Customers");

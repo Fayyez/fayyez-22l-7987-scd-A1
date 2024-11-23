@@ -65,6 +65,7 @@ public class TerminalApp {
         }
         Date issueDate = new Date();
         int tax_index = this.getIndex(cust);
+        // taxes and cost of bill
         TaxManager taxManager = TaxManager.getInstance();
         int reg_units_consumed = current_reg_reading - cust.getUnitsConsumed();
         int peak_units_consumed = 0;

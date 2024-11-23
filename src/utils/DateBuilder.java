@@ -39,4 +39,8 @@ public class DateBuilder {
         }
         return (expiry_date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000) < 30;
     }
+
+    public static int getMonth(Date issueDate) {
+        return  issueDate.getMonth();
+    }
 }
