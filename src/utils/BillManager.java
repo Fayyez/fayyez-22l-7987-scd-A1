@@ -5,13 +5,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-//4 digit customer id (borrowed from the CustomersInfo file),
-//Billing month, Current Meter Reading Regular, Current Meter
-//Reading Peak, Reading Entry Date in format DD/MM/YYYY (cannot be in future, issue date of the bill),
-//Cost of electricity, Sales Tax Amount, Fixed Charges, Total Billing
-//amount, Due Date in format DD/MM/YYYY (7 calendar days after the entry of Current Meter
-//Reading), Bill Paid Status (Paid or Unpaid), Bill payment Date in format DD/MM/YYYY (cannot be before Reading Entry Date)
-
 public class BillManager {
     private final static String filepath = "src/database/bills.txt";
 
@@ -46,18 +39,36 @@ public class BillManager {
             throw new RuntimeException(e);
         }
     }
+//    public static void writeBillInfo(ArrayList<Bill> bills) {
+//        // write the bill info to the bills text file
+//        try (FileWriter fw = new FileWriter(filepath);
+//             BufferedWriter bw = new BufferedWriter(fw);) {
+//            for (Bill bill : bills) {
+//                String paiddate;
+//                if (!bill.getIsPaid())  paiddate = "not paid yet";
+//                else paiddate = DateBuilder.getDateStr(bill.getPaidDate());
+//                String entry = bill.getCustomerID() + "," + bill.getBillingmonth() + "," + bill.getCurrent_reg_reading() + "," + bill.getCurrent_peak_reading() + "," + DateBuilder.getDateStr(bill.getIssueDate()) + "," + bill.getCost() + "," + bill.getTaxAmount() + "," + bill.getFixedcharges() + "," + bill.getTotalbill() + "," + DateBuilder.getDateStr(bill.getDueDate()) + "," + bill.getIsPaid() + "," + paiddate;
+//                bw.write(entry);
+//                bw.newLine();
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException("Error writing to bills file");
+//        }
+//    }
     public static void writeBillInfo(ArrayList<Bill> bills) {
         // write the bill info to the bills text file
-        try (FileWriter fw = new FileWriter(filepath);
-             BufferedWriter bw = new BufferedWriter(fw);) {
+        ArrayList<String> dataToWrite = new ArrayList<>();
+        try {
             for (Bill bill : bills) {
                 String paiddate;
                 if (!bill.getIsPaid())  paiddate = "not paid yet";
                 else paiddate = DateBuilder.getDateStr(bill.getPaidDate());
-                String entry = bill.getCustomerID() + "," + bill.getBillingmonth() + "," + bill.getCurrent_reg_reading() + "," + bill.getCurrent_peak_reading() + "," + DateBuilder.getDateStr(bill.getIssueDate()) + "," + bill.getCost() + "," + bill.getTaxAmount() + "," + bill.getFixedcharges() + "," + bill.getTotalbill() + "," + DateBuilder.getDateStr(bill.getDueDate()) + "," + bill.getIsPaid() + "," + paiddate;
-                bw.write(entry);
-                bw.newLine();
+                dataToWrite.add(bill.getCustomerID() + "," + bill.getBillingmonth() + "," + bill.getCurrent_reg_reading() +
+                        "," + bill.getCurrent_peak_reading() + "," + DateBuilder.getDateStr(bill.getIssueDate()) + "," + bill.getCost() +
+                        "," + bill.getTaxAmount() + "," + bill.getFixedcharges() + "," + bill.getTotalbill() + "," +
+                        DateBuilder.getDateStr(bill.getDueDate()) + "," + bill.getIsPaid() + "," + paiddate);
             }
+            DBClient.wrtieToFile(filepath, dataToWrite);
         } catch (Exception e) {
             throw new RuntimeException("Error writing to bills file");
         }

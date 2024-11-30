@@ -60,7 +60,7 @@ public class LoginPage extends JFrame implements ActionListener {
         JLabel lbl_usericon = new JLabel();
         lbl_usericon.setText("Login Page");
         lbl_usericon.setFont(new Font("Arial", Font.BOLD, 18));
-        lbl_usericon.setIcon(new ImageIcon(icon));
+        lbl_usericon.setIcon(new ImageIcon(new ImageIcon("src/Assets/logo.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         lbl_usericon.setHorizontalTextPosition(SwingConstants.LEFT);
         lbl_usericon.setIconTextGap(5);
         lbl_usericon.setHorizontalAlignment(SwingConstants.CENTER);
