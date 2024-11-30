@@ -62,13 +62,17 @@ public class ViewBillPanel extends JPanel {
         // Action listener for the search
         lblSearchIcon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                searchBill();
+                try {
+                    searchBill();
+                } catch (Exception e) {
+                    System.out.println("Error searching for bill: " + e.getMessage());
+                }
             }
         });
     }
 
     // Method to handle searching for a bill
-    private void searchBill() {
+    private void searchBill() throws Exception {
         String customerIdStr = searchField.getText().trim();
         if (customerIdStr.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a customer ID.", "Error", JOptionPane.ERROR_MESSAGE);

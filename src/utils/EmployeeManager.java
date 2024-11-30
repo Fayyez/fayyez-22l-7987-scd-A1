@@ -6,13 +6,12 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class EmployeeManager {
-    private final static String filepath = "src/database/employeeInfo.txt";
+    private final static String filepath = "employeeInfo.txt";
     //methods
     public static void getListOfEmployees(ArrayList<Employee> employees) throws Exception {
-        try(FileReader fr = new FileReader(filepath);
-            BufferedReader br = new BufferedReader(fr);) {
-            String entry;
-            while((entry = br.readLine()) != null) {
+        try {
+            ArrayList<String> alldata = DBClient.readFromFile(filepath);
+            for(String entry: alldata) {
                 String[]data = entry.split(",");
                 String username = data[0];
                 String password = data[1];
@@ -25,15 +24,11 @@ public class EmployeeManager {
     }
     public static void writeEmployeesInfo(ArrayList<Employee> employees) throws Exception {
         try {
-            FileWriter fw = new FileWriter(filepath);
-            BufferedWriter bw = new BufferedWriter(fw);
+            ArrayList<String> allData = new ArrayList<>();
             for(Employee e: employees) {
-                String entry = e.getUsername() + "," + e.getPassword();
-                bw.write(entry);
-                bw.newLine();
+                allData.add(e.getUsername() + "," + e.getPassword());
             }
-            bw.close();
-            fw.close();
+            DBClient.wrtieToFile(filepath, allData);
         } catch (Exception e) {
             throw new Exception("Error writing to employees file");
         }

@@ -62,7 +62,11 @@ public class CustomerDashboard extends JFrame {
     private void setButtonActions() {
         // setting up the button actions
         btn_view_current_bill.addActionListener(e -> {
-            pnl_view_bill = new ViewBillPanel(user);
+            try {
+                pnl_view_bill = new ViewBillPanel(user);
+            } catch (Exception ex) {
+                System.out.println("Error creating view bill panel: " + ex.getMessage());
+            }
             card_layout_main.show(pnl_right, "view_bill");
         });
         btn_update_cnic_expiry.addActionListener(e -> {
@@ -134,7 +138,11 @@ public class CustomerDashboard extends JFrame {
         pnl_right.setLayout(card_layout_main);
         pnl_right.setBounds(0,0,WIDTH-200,HEIGHT);
         // create all three tabs as panels
-        pnl_view_bill = new ViewBillPanel(user);
+        try {
+            pnl_view_bill = new ViewBillPanel(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         pnl_update_cnic = new UpdateCNICPanel(user);
 
         // add all the panels to the main right panel with CardLayout

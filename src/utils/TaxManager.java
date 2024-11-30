@@ -2,6 +2,7 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 public class TaxManager { // is a singleton class
     private static TaxManager instance; // static for singleton pattern
@@ -9,12 +10,12 @@ public class TaxManager { // is a singleton class
     private int[] peakUnitPrices;
     private float[] taxPercentages;
     private int[] fixedCharges;
-    private final static String filepath = "src/database/taxInfo.txt";
+    private final static String filepath = "taxInfo.txt";
     // constant static vars
-    static final int ONE_PHASE_DOMESTIC = 0;
-    static final int ONE_PHASE_COMMERCIAL = 1;
-    static final int THREE_PHASE_DOMESTIC = 2;
-    static final int THREE_PHASE_COMMERCIAL = 3;
+    public static final int ONE_PHASE_DOMESTIC = 0;
+    public static final int ONE_PHASE_COMMERCIAL = 1;
+    public static final int THREE_PHASE_DOMESTIC = 2;
+    public static final int THREE_PHASE_COMMERCIAL = 3;
 
     // Private constructor for singleton pattern
     private TaxManager() {
@@ -27,11 +28,9 @@ public class TaxManager { // is a singleton class
 
     public void loadData() {
         try {
-            FileReader fr = new FileReader(filepath);
-            BufferedReader br = new BufferedReader(fr);
-            String entry;
+            ArrayList<String> allData = DBClient.readFromFile(filepath);
             int i = 0;
-            while ((entry = br.readLine()) != null) {
+            for(String entry: allData) {
                 if (i >= 4) {
                     throw new IllegalArgumentException("Too many entries in tax info file");
                 }
@@ -51,8 +50,6 @@ public class TaxManager { // is a singleton class
                 fixedCharges[i] = Integer.parseInt(data[4]);
                 i++;
             }
-            br.close();
-            fr.close();
         } catch (Exception e) {
             System.out.println("Error reading tax info file: " + e.getMessage());
         }

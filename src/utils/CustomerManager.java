@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CustomerManager {
-    private final static String filepath = "src/database/custermerInfo.txt";
+    private final static String filepath = "custermerInfo.txt";
+
     public static void getListOfCustomers(ArrayList<Customer> customers) throws FileNotFoundException {
         // read all the customers in the customerInfo text file and return a list of customers
-        try (FileReader fr = new FileReader(filepath);
-             BufferedReader br = new BufferedReader(fr);) {
-            String entry;
-            while ((entry = br.readLine()) != null) {
+        try {
+            ArrayList<String> allData = DBClient.readFromFile(filepath);
+            for(String entry: allData) {
                 // read the data
                 String[] data = entry.split(",");
                 int cust_id = Integer.parseInt(data[0]);
@@ -37,21 +37,20 @@ public class CustomerManager {
                 else throw new IllegalArgumentException("Invalid meter type in customerInfo.txt");
                 customers.add(cust);
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     public static void writeCustomerInfo(ArrayList<Customer> customers) {
         // write the customer info to the customerInfo text file
-        try (FileWriter fw = new FileWriter(filepath);
-             BufferedWriter bw = new BufferedWriter(fw);) {
+        try {
+            ArrayList<String> allData = new ArrayList<>();
             for (Customer cust : customers) {
                 String meter_type = cust instanceof OnePhaseCust ? "single" : "three";
                 int peak_units_consumed = cust instanceof ThreePhaseCust ? ((ThreePhaseCust) cust).getPeakUnitsConsumed() : 0;
-                String entry = cust.getId() + "," + cust.getCnic() + "," + cust.getName() + "," + cust.getAddress() + "," + cust.getPhone() + "," + cust.getIsDomesticStr() + "," + meter_type + "," + DateBuilder.getDateStr(cust.getConnectionDateObj()) + "," + cust.getUnitsConsumed() + "," + peak_units_consumed;
-                bw.write(entry);
-                bw.newLine();
+                allData.add(cust.getId() + "," + cust.getCnic() + "," + cust.getName() + "," + cust.getAddress() + "," + cust.getPhone() + "," + cust.getIsDomesticStr() + "," + meter_type + "," + DateBuilder.getDateStr(cust.getConnectionDateObj()) + "," + cust.getUnitsConsumed() + "," + peak_units_consumed);
             }
+            DBClient.wrtieToFile(filepath, allData);
         } catch (IOException e) {
             throw new RuntimeException("Error writing to customers file");
         }

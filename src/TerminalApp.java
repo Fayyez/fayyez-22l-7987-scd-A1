@@ -45,7 +45,7 @@ public class TerminalApp {
         }
         return 0;// default return 1phase single meter
     }
-    public void generateBill(Scanner scanner) throws FileNotFoundException {
+    public void generateBill(Scanner scanner) throws Exception {
         // get the cutsomer whose bill is to be added
         System.out.println("Enter Customer ID: ");
         int cust_id = Integer.parseInt(scanner.nextLine());
@@ -96,7 +96,7 @@ public class TerminalApp {
             System.out.println(e.getMessage());
         }
     }
-    public void setBillToPaid() throws FileNotFoundException {
+    public void setBillToPaid() throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Customer ID: ");
         int cust_id = Integer.parseInt(scanner.nextLine());

@@ -11,7 +11,7 @@ public class ViewBillPanel extends JPanel {
     private Customer customer;
     private Bill currentBill;
 
-    public ViewBillPanel(Customer customer) {
+    public ViewBillPanel(Customer customer) throws Exception {
         this.customer = customer;
         this.currentBill = BillManager.getLatestBill(customer.getId());
 
